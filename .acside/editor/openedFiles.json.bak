@@ -1,0 +1,20 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/XLSXtoDataBase/app/src/main/java/com/example/xlsxtodatabase/MainActivity.java",
+      "selection": {
+        "end": {
+          "column": 46,
+          "index": 378,
+          "line": 12
+        },
+        "start": {
+          "column": 46,
+          "index": 378,
+          "line": 12
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/XLSXtoDataBase/app/src/main/java/com/example/xlsxtodatabase/MainActivity.java"
+}
