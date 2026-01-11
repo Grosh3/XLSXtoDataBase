@@ -14,7 +14,9 @@ public class MainActivity extends AppCompatActivity {
         
         System.out.println("привет это тест2");
         
+       System.out.println("новый текст");
         
         
+        
+   }     
     }
-}св
