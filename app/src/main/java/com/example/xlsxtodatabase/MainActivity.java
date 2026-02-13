@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
  //*   public void createBaseAndCreateTableGateValves (){
      //   controlAndMeasuringInstruments=getBaseContext().openOrCreateDatabase("control_and_measuring_instruments",MODE_PRIVATE,null);
     //    controlAndMeasuringInstruments.execSQL("CREATE TABLE IF NOT EXISTS gatevalves (name_eng TEXT,kks TEXT, name TEXT, isy TEXT, power_cabinet TEXT,full_name_of_the_position TEXT,on_place TEXT,namespace_view_open BLOB,description_blocking_open BLOB, namespace_view_close BLOB,description_blocking_close BLOB  )");
-
+/// bpvtytybz
     }
 
 
