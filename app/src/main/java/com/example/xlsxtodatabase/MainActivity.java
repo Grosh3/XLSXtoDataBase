@@ -1,17 +1,18 @@
 package com.example.xlsxtodatabase;
 
+import android.util.Log;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-
+import com.example.xlsxtodatabase.databinding.ActivityMainBinimpimportimmm
+//import com.example.xlsxtodatabasiimportimport 
 public class MainActivity extends AppCompatActivity {
+    private ActivityMainBinding binding;
     private static final String TAG = "MyActivity////";
     Uri uriExcel;
      private  static final   String mimeTypeExcelStr = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -22,7 +23,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+       binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        
+        
         openXlsxContract.launch(mimeTypeExcelStr);
         DatabaseValvesHelper databaseValvesHelper = new DatabaseValvesHelper(getBaseContext());
         databaseValvesHelper.getReadableDatabase();
