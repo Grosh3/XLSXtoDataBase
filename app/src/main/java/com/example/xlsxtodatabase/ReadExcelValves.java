@@ -17,12 +17,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import com.example.xlsxtodatabase.Valve;
 
 public class ReadExcelValves {
+public String TAG= "ReadExcelValves Message" ;
+    Valve val2 = new Valve();
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
-
+     
     public void readValvesAsync(Context context, Uri uri, ExcelReadListener listener) {
         executor.execute(() -> {
             try {
@@ -34,7 +37,7 @@ public class ReadExcelValves {
         });
     }
 
-    private List<Valve> readFromExcel(Context context, Uri uri) throws Exception {
+    private List<Valve> readFromExcel(Context context, Uri uri)  {
         List<Valve> valves = new ArrayList<>();
         DataFormatter dataFormatter = new DataFormatter();
 
@@ -74,6 +77,10 @@ public class ReadExcelValves {
                 }
                 valves.add(valve);
             }
+        
+        }
+        catch(Exception ec){
+         ec.printStackTrace(); 
         }
         return valves;
     }

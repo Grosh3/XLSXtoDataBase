@@ -15,8 +15,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-     buildFeatures {
-    //    viewBinding = true
+    
+    buildFeatures {
+        // viewBinding = true
         dataBinding = true
     }
 
@@ -29,14 +30,22 @@ android {
             )
         }
     }
+    
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
-dependencies {
+// Правильный синтаксис для Kotlin DSL
+configurations.all {
+    resolutionStrategy {
+        force("androidx.core:core:1.12.0")
+        force("androidx.core:core-ktx:1.12.0")
+    }
+}
 
+dependencies {
     implementation("androidx.appcompat:appcompat:1.7.1")
     implementation("com.google.android.material:material:1.14.0-alpha09")
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
@@ -46,6 +55,4 @@ dependencies {
     implementation("org.apache.poi:poi-ooxml:5.5.1")
     implementation("org.apache.xmlbeans:xmlbeans:5.3.0")
     implementation("org.apache.commons:commons-collections4:4.5.0")
-
-
 }
