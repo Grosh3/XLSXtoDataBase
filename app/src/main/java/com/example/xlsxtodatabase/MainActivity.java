@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import com.example.xlsxtodatabase.databinding.ActivityMainBinding;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
  
      private ActivityMainBinding binding;
@@ -21,7 +23,23 @@ public class MainActivity extends AppCompatActivity {
      private  static final   String mimeTypeExcelStr = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     SQLiteDatabase controlAndMeasuringInstruments ;
     ActivityResultLauncher<String> openXlsxContract = registerForActivityResult(new ActivityResultContracts.GetContent(),uri->{if(uri!=null)uriExcel=uri;
-        Log.d(TAG, "worked the resultActivityExcel" );});
+        Log.d(TAG, "worked the resultActivityExcel" );
+    ReadExcelValves readexcelvalves = new ReadExcelValves();
+    readexcelvalves.readValvesAsync(getApplicationContext(), uri, new ExcelReadListener() {
+        @Override
+        public void onSuccess(int success) {
+
+        }
+
+        @Override
+        public void onError(Exception e) {
+
+        }
+    });
+
+
+
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +49,9 @@ public class MainActivity extends AppCompatActivity {
         binding.text.setText("пашоль");
         
         openXlsxContract.launch(mimeTypeExcelStr);
-        DatabaseValvesHelper databaseValvesHelper = new DatabaseValvesHelper(getBaseContext());
-        databaseValvesHelper.getReadableDatabase();
+
     }
- //*   public void createBaseAndCreateTableGateValves (){
-     //   controlAndMeasuringInstruments=getBaseContext().openOrCreateDatabase("control_and_measuring_instruments",MODE_PRIVATE,null);
-    //    controlAndMeasuringInstruments.execSQL("CREATE TABLE IF NOT EXISTS gatevalves (name_eng TEXT,kks TEXT, name TEXT, isy TEXT, power_cabinet TEXT,full_name_of_the_position TEXT,on_place TEXT,namespace_view_open BLOB,description_blocking_open BLOB, namespace_view_close BLOB,description_blocking_close BLOB  )");
-/// bpvtytybz
+
     }
 
 

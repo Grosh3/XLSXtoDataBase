@@ -13,6 +13,7 @@ public class Valve {
     public String full_name_of_the_position;
     public String on_place;
     public String ap_50;
+    public String mark;
     public String cda_cabinet;
     public String cda_cabinet_position;
     public String slot;
