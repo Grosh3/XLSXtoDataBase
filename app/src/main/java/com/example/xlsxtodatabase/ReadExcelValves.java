@@ -34,7 +34,8 @@ public String TAG= "ReadExcelValves Message" ;
             try {
                 List<Valve> result = readFromExcel(context, uri);
                 DBValvesRepository repository = new DBValvesRepository(context);
-                mainHandler.post(() -> listener.onSuccess(repository.listToDbTransaction(result))); //тут ошибка ',' or ')' expected
+                mainHandler.post(() -> listener.onSuccess(repository.listToDbTransaction(result)));
+
             } catch (Exception e) {
                 mainHandler.post(() -> listener.onError(e));
             }
