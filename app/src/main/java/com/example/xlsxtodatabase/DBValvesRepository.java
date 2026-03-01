@@ -10,11 +10,13 @@ import java.util.List;
 public class DBValvesRepository {
 
     private DatabaseValvesHelper dbHelper;
+    public static final String TAG = "DBValvesRepository";
     public DBValvesRepository(Context context){
         this.dbHelper=DatabaseValvesHelper.getInstance(context);
     }
 
     public int  listToDbTransaction(List<Valve> valves) {
+        Log.e(TAG,"начал работать метод listToDbTransaction() ");
         int successCount= 0;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
@@ -46,7 +48,7 @@ public class DBValvesRepository {
                 long incertResult= db.insert(DatabaseValvesHelper.TABLE, null, values);
                 if(incertResult !=-1){
                     successCount++;
-
+                    Log.e(TAG,"работает счетчик записей в БД");
                 }
                 else {
 
@@ -63,6 +65,7 @@ public class DBValvesRepository {
             Log.e("DatabaseHelper", "Error inserting valves: " + ec.getMessage());
         } finally {
             db.endTransaction();
+            Log.e(TAG,"конец транзакции, закрываем подключение к БД");
 
             db.close();
         }

@@ -5,8 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -48,21 +50,54 @@ public String TAG= "ReadExcelValves Message" ;
 
         try (InputStream inputStream = context.getContentResolver().openInputStream(uri);
              XSSFWorkbook workbook = new XSSFWorkbook(inputStream)) {
-
+            Log.e(TAG,"успешно подключена таблица эксель");
             XSSFSheet sheet = workbook.getSheetAt(0);
             for(int c=1;c<=524;c++) {
                 Row row = sheet.getRow(c);
 
+                if (row == null) {
+                    Log.w(TAG, "Строка " + (c + 1) + " пустая, пропускаем");
+                    continue;
+                }
 
 
             // Пропускаем заголовок (первую строку)
                 Valve valve = new Valve();
                 for (int i = 1; i <= 16; i++) {
-                    Cell cell = row.getCell(i);
-                    if(cell.getStringCellValue()==null){
-                        cell.setCellValue("");
+                    Cell cell = row.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    String value = "";
+                    if(cell==null){
+                        Log.e(TAG,"cell is null");
+                        try{
+                            value= dataFormatter.formatCellValue(cell);
+                            Log.e(TAG," форматтер отработал успешно");
+
+                        }
+                        catch (Exception ec){
+                            Log.e(TAG,ec.getMessage());
+                        }
                     }
-                    String value = dataFormatter.formatCellValue(cell);
+
+                   CellType cellType = cell.getCellType();
+                   try{
+                       switch (cellType){
+                           case STRING:
+                               value = cell.getStringCellValue();
+                               break;
+                           case NUMERIC:
+                               value = String.valueOf(cell.getNumericCellValue());
+                               break;
+                           case BOOLEAN:
+                               value = String.valueOf(cell.getBooleanCellValue());
+                               break;
+
+                       }
+
+                    }
+                   catch (Exception ec){
+                       Log.e(TAG,ec.getMessage());
+                   }
+
                     switch (i) {
                         case 1:
                             valve.name_eng = value;
@@ -89,9 +124,7 @@ public String TAG= "ReadExcelValves Message" ;
                             valve.ap_50 = value;
 
                             break;
-
-
-                        case 9:
+                            case 9:
                             valve.mark = value;
                             break;
                         case 10:
@@ -119,11 +152,13 @@ public String TAG= "ReadExcelValves Message" ;
 
                 }
                 valves.add(valve);
+                Log.e(TAG,"успешно добавлены значения ячеек в список valves");
             }
         
         }
         catch(Exception ec){
-         ec.printStackTrace(); 
+         ec.printStackTrace();
+         Log.e(TAG,"проблема при создании и прочтении эксель");
         }
         return valves;
     }
