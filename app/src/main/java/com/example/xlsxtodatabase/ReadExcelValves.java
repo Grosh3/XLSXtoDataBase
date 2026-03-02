@@ -63,7 +63,7 @@ public String TAG= "ReadExcelValves Message" ;
 
             // Пропускаем заголовок (первую строку)
                 Valve valve = new Valve();
-                for (int i = 1; i <= 16; i++) {
+                for (int i = 0; i <= 15; i++) {
                     Cell cell = row.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     String value = "";
                     if(cell==null){
@@ -97,57 +97,56 @@ public String TAG= "ReadExcelValves Message" ;
                    catch (Exception ec){
                        Log.e(TAG,ec.getMessage());
                    }
-
                     switch (i) {
-                        case 1:
-                            valve.name_eng = value;
+                        case 0: // Первая колонка (индекс 0)
+                            valve.name_eng = value; // или другая логика для первой колонки
                             break;
-                        case 2:
+                        case 1:
                             valve.kks = value;
                             break;
-                        case 3:
+                        case 2:
                             valve.name = value;
                             break;
-                        case 4:
+                        case 3:
                             valve.isy = value;
                             break;
-                        case 5:
+                        case 4:
                             valve.power_cabinet = value;
                             break;
-                        case 6:
+                        case 5:
                             valve.full_name_of_the_position = value;
                             break;
-                        case 7:
+                        case 6:
                             valve.on_place = value;
                             break;
-                        case 8:
+                        case 7:
                             valve.ap_50 = value;
-
                             break;
-                            case 9:
+                        case 8:
                             valve.mark = value;
                             break;
-                        case 10:
+                        case 9:
                             valve.cda_cabinet = value;
                             break;
-                        case 11:
+                        case 10:
                             valve.cda_cabinet_position = value;
                             break;
-                        case 12:
+                        case 11:
                             valve.slot = value;
                             break;
-                        case 13:
+                        case 12:
                             valve.name_space_view_open = value;
                             break;
-                        case 14:
+                        case 13:
                             valve.description_blocking_open = value;
                             break;
-                        case 15:
+                        case 14:
                             valve.namespace_view_close = value;
                             break;
-                        case 16:
+                        case 15:
                             valve.description_blocking_close = value;
                             break;
+
                     }
 
                 }
