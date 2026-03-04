@@ -14,7 +14,7 @@ public class DBValvesRepository {
     public DBValvesRepository(Context context){
         this.dbHelper=DatabaseValvesHelper.getInstance(context);
     }
-
+// метод записи списка обьектов Valves (который хранит в себе данные из таблицы эксель) в БД
     public int  listToDbTransaction(List<Valve> valves) {
         Log.e(TAG,"начал работать метод listToDbTransaction() ");
         int successCount= 0;

@@ -88,7 +88,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         binding.text.setText("пашоль");
         Log.e(TAG,"onCREATE yes");
-
+/* лаунчер который отвечал за копирование эксель в список обьектов Valves , копирование данных в БД
+     копирование самой БД в доступную папку на телефоне( сейчас отключен, тк БД создана, таблица Задвижек
+     в БД создана и успешно функционирует. Я его не удаляю, потому что он может еще понадобиться.
+ */
         openXlsxContract.launch(mimeTypeExcelStr);
 
     }

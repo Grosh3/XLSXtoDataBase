@@ -61,9 +61,9 @@ public class DatabaseValvesHelper extends SQLiteOpenHelper {
                 CDA_CABINET_POSITION + " TEXT, " +
                 SLOT + " TEXT, " +
                 NAMESPACE_VIEW_OPEN + " TEXT, " +
-                DESCRIPTION_BLOCKING_OPEN + " TEXT, " +
-                NAMESPACE_VIEW_CLOSE + " TEXT, " +
-                DESCRIPTION_BLOCKING_CLOSE + " TEXT" +
+                DESCRIPTION_BLOCKING_OPEN + " BLOB, " +
+                NAMESPACE_VIEW_CLOSE + " BLOB, " +
+                DESCRIPTION_BLOCKING_CLOSE + " BLOB" +
                 ");");
     }
 
