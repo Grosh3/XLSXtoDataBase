@@ -63,7 +63,7 @@ public String TAG= "ReadExcelValves Message" ;
 
             // Пропускаем заголовок (первую строку)
                 Valve valve = new Valve();
-                for (int i = 0; i <= 15; i++) {
+                for (int i = 0; i <= 11; i++) {
                     Cell cell = row.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     String value = "";
                     if(cell==null){
@@ -134,18 +134,6 @@ public String TAG= "ReadExcelValves Message" ;
                         case 11:
                             valve.slot = value;
                             break;
-                        case 12:
-                            valve.name_space_view_open = value;
-                            break;
-                        case 13:
-                            valve.description_blocking_open = value;
-                            break;
-                        case 14:
-                            valve.namespace_view_close = value;
-                            break;
-                        case 15:
-                            valve.description_blocking_close = value;
-                            break;
 
                     }
 
@@ -166,3 +154,7 @@ public String TAG= "ReadExcelValves Message" ;
         executor.shutdown();
     }
 }
+
+
+
+

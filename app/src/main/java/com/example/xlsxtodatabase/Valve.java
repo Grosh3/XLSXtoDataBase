@@ -17,10 +17,10 @@ public class Valve {
     public String cda_cabinet;
     public String cda_cabinet_position;
     public String slot;
-    public String name_space_view_open;
-    public String description_blocking_open;
-    public String namespace_view_close;
-    public String description_blocking_close;
+  //  public String name_space_view_open;
+  //  public String description_blocking_open;
+ //   public String namespace_view_close;
+ //   public String description_blocking_close;
 
 
 }

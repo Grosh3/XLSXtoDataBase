@@ -27,6 +27,9 @@ public class DatabaseValvesHelper extends SQLiteOpenHelper {
     public static final String DESCRIPTION_BLOCKING_OPEN = "description_blocking_open";
     public static final String NAMESPACE_VIEW_CLOSE = "namespace_view_close";
     public static final String DESCRIPTION_BLOCKING_CLOSE = "description_blocking_close";
+    public static final String NAMESPACE_VIEW_PERIFER = "namespace_view_perifer";
+    public static final String DESCRIPTION_BLOCKING_PERIFER = "description_blocking_perifer";
+
     static final String TABLE = "gate_valves";
     private static final String DATABASE_NAME = "control_and_measuring_instruments.db";
     private static final int DB_VALVESVERSIONSTR = 1;
@@ -60,10 +63,12 @@ public class DatabaseValvesHelper extends SQLiteOpenHelper {
                 CDA_CABINET + " TEXT, " +
                 CDA_CABINET_POSITION + " TEXT, " +
                 SLOT + " TEXT, " +
-                NAMESPACE_VIEW_OPEN + " TEXT, " +
-                DESCRIPTION_BLOCKING_OPEN + " BLOB, " +
+                NAMESPACE_VIEW_OPEN + " BLOB, " +
+                DESCRIPTION_BLOCKING_OPEN + " TEXT, " +
                 NAMESPACE_VIEW_CLOSE + " BLOB, " +
-                DESCRIPTION_BLOCKING_CLOSE + " BLOB" +
+                DESCRIPTION_BLOCKING_CLOSE + " TEXT," +
+                NAMESPACE_VIEW_PERIFER + " BLOB, " +
+                DESCRIPTION_BLOCKING_PERIFER + " TEXT" +
                 ");");
     }
 
