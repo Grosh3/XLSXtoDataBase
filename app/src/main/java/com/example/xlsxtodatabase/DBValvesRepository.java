@@ -8,7 +8,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//класс для облегчения работы с DatabaseValvesHelper (который в свою очередь работает с БД)
 public class DBValvesRepository {
 
     private DatabaseValvesHelper dbHelper;
@@ -78,21 +78,31 @@ public class DBValvesRepository {
         return successCount;
     }
 
-
+     /* метод для записи двоичных данных в БД, в качкстве даоичных данных изображения фрагментов блокировок
+     он получает на вход одно из трех названий папок: OPEN_BLOCK,  CLOSE_BLOCK,PERIFER_BLOCK, выясняет какую именно из папок ему передали
+     и поэтому определяет в какую колонку записать данные, также он на вход получает список названий файлов в папке, чтобы по ним найти
+     совпадения с колонкой 2 "name_eng" БД.
+      */
     public void imageDBwriter(List<String> listFoldersBlocksINAssets, String folderName) {
-        Log.e(TAG, "начал работать метод listFoldersBlocksINAssets ");
+        Log.e(TAG, "imageDBwriter");
         byte[] byteFileImageArray;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String tableName = DatabaseValvesHelper.TABLE;
-        String[] columns = new String[]{DatabaseValvesHelper.NAME_ENG};
+      //  String[] columns = new String[]{DatabaseValvesHelper.NAME_ENG};
+        String[] columns = new String[]{
+                DatabaseValvesHelper.COLUMN_ID,     // ВАЖНО: используем COLUMN_ID, а не "_id"
+                DatabaseValvesHelper.NAME_ENG
+        };
         String columnNameEng = DatabaseValvesHelper.NAME_ENG;
+        List <String> listEmptyFiles = new ArrayList<>();
         Cursor cursor = db.query(tableName, columns, null, null, null, null, null);
-        boolean boolIsntEmpty= false;
-        for (int i = 0; i <= listFoldersBlocksINAssets.size(); i++) {
+        boolean found= false;
+        for (int i = 0; i < listFoldersBlocksINAssets.size(); i++) {
             String valueImageString = listFoldersBlocksINAssets.get(i);
-            List <String> listEmptyFiles = new ArrayList<>();
-            if (cursor != null && cursor.moveToFirst()) {
+            Log.d(TAG, "распечатка значения valueImageString"+valueImageString);
 
+            if (cursor != null && cursor.moveToFirst()) {
+                //запуск перебора колонки 2 БД
                 ContentValues values = new ContentValues();
                 int columnIndex = cursor.getColumnIndexOrThrow(columnNameEng);
                 int idIndex = cursor.getColumnIndexOrThrow("_id");
@@ -105,97 +115,88 @@ public class DBValvesRepository {
                     String cellValueNameEng = cursor.getString(columnIndex);
                     //Сравнение строк из БД и названия файла из папки
                     if (valueImageString.contains(cellValueNameEng)){
-                        boolIsntEmpty=true;
+                        Log.e(TAG,"imageDBwriter() совпадение найдено");
+                        found=true;
 
-                        switch (folderName){
+                        switch (folderName) {
 
 
                             case "OPEN_BLOCK":
-                           byteFileImageArray=    myAssetManager.imageToByteArray(context,folderName,valueImageString);
-                           values.put("name_space_view_open",byteFileImageArray);
-                                 updated = db.update(
-                                        "gate_valves",
-                                        values,
-                                        "_id = ?",
-                                        new String[]{String.valueOf(rowId)}
-                                );
+                                byteFileImageArray = myAssetManager.imageToByteArray(context, folderName, valueImageString);
+                                values.put(DatabaseValvesHelper.NAMESPACE_VIEW_OPEN, byteFileImageArray);
 
-                                if (updated > 0) {
-                                    Log.d("DB", "Успешно обновлена колонка close");
-                                } else {
-                                    Log.e("DB", "Ошибка обновления");
-                                }
                                 break;
 
 
                             case "CLOSE_BLOCK":
-                                byteFileImageArray=    myAssetManager.imageToByteArray(context,folderName,valueImageString);
-                                values.put("name_space_view_close",byteFileImageArray);
-                                 updated = db.update(
-                                        "gate_valves",
-                                        values,
-                                        "_id = ?",
-                                        new String[]{String.valueOf(rowId)}
-                                );
+                                //получаем массив бинарных данных выбранного файла название которого передали в myAssetManager
+                                byteFileImageArray = myAssetManager.imageToByteArray(context, folderName, valueImageString);
+                                values.put(DatabaseValvesHelper.NAMESPACE_VIEW_CLOSE, byteFileImageArray);
 
-                                if (updated > 0) {
-                                    Log.d("DB", "Успешно обновлена колонка close");
-                                } else {
-                                    Log.e("DB", "Ошибка обновления");
-                                }
 
                                 break;
                             case "PERIFER_BLOCK":
-                                byteFileImageArray=    myAssetManager.imageToByteArray(context,folderName,valueImageString);
-                                values.put("namespace_view_perifer",byteFileImageArray);
-                                updated = db.update(
-                                        "gate_valves",
-                                        values,
-                                        "_id = ?",
-                                        new String[]{String.valueOf(rowId)}
-                                );
+                                byteFileImageArray = myAssetManager.imageToByteArray(context, folderName, valueImageString);
+                                values.put(DatabaseValvesHelper.NAMESPACE_VIEW_PERIFER, byteFileImageArray);
 
-                                if (updated > 0) {
-                                    Log.d("DB", "Успешно обновлена колонка close");
-                                } else {
-                                    Log.e("DB", "Ошибка обновления");
-                                }
 
                                 break;
+                            default:
+                                Log.e(TAG, "Неизвестная папка: " + folderName);
+                                continue;
+                        }
 
+                        updated = db.update(
+                                DatabaseValvesHelper.TABLE,
+                                values,
+                                DatabaseValvesHelper.COLUMN_ID + " = ?",
+                                new String[]{String.valueOf(rowId)}
+                        );
 
+                        if (updated > 0) {
+                            Log.d(TAG, "Успешно обновлена запись для: " + cellValueNameEng);
+                        } else {
+                            Log.e(TAG, "Ошибка обновления для: " + cellValueNameEng);
+                        }
+                    }
 
 
                        //не забыть счетчик файлов которые не совпали
 
-                        }
 
 
 
 
 
 
-                 }
 
                     // Для разных типов данных:
                     // int intValue = cursor.getInt(columnIndex);
                     // long longValue = cursor.getLong(columnIndex);
                     // double doubleValue = cursor.getDouble(columnIndex);
+// переходим к следующей строке
+                } while (cursor.moveToNext());
 
-                } while (cursor.moveToNext()); // переходим к следующей строке
+                cursor.close();
+                cursor = null;
+
+
+
             }
 
             // 3. Не забываем закрыть курсор
-            if (cursor != null) {
-                cursor.close();
-            }
-            db.close();
-            if (!boolIsntEmpty){
+
+
+            if (!found){
               listEmptyFiles.add(valueImageString+" "+folderName+" нет совпадений");
-            }{
+            }
+            {
             Log.e(TAG,"все файлы одной папки совпали");}
         }
-
-
+        if (cursor != null) {
+            cursor.close();
+        }
+        db.close();
+        Log.e(TAG,listEmptyFiles.toString());
     }
-}
+    }

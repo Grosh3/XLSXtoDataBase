@@ -23,49 +23,81 @@ private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     public List<String> listFoldersBlocksINAssets = new ArrayList<>();
     public String folderName;
-    //будем вызывать этот метод из Майн и передавать в него список имен папок блокировок
+    /*этот метод получает три названия папок и перебором каждой по найденным совпадениям в БД их содержимого, записывает содержащиеся в них изображения
+    в качестве бинарных данных, каждый в соотв кололнку БД
+     */
+
     public void assetsForDB(Context context,List<String> listFoldersBlocksINAssets,DBWriteListener dbWriteListener){
 
-            executor.execute(()->{
-                try{
+            executor.execute(()-> {
+                try {
                     DBValvesRepository dbValvesRepository = new DBValvesRepository(context);
-                    for(String folderName:listFoldersBlocksINAssets) {
+                    for (String folderName : listFoldersBlocksINAssets) {
 
 
-
-                        dbValvesRepository.imageDBwriter( getFilesFromAssetsFolder(context,listFoldersBlocksINAssets,folderName ),folderName);
+                        dbValvesRepository.imageDBwriter(getImageFilesFromAssetsFolder(context,  folderName), folderName);
 
 
                     }
-                }catch (Exception e){}
+                    Boolean resultBLOB = true;
+                    mainHandler.post(() -> dbWriteListener.onDBsuccess(resultBLOB));
+                } catch (Exception e) {
+                    mainHandler.post(() -> dbWriteListener.onDBerror(e));
 
+                }
 
             });
-
-
-
-
-
     }
 
 
-
-
-    public List<String> getFilesFromAssetsFolder(Context context,  List<String> listFoldersBlocksINAssets, String folderName) {
+    public List<String> getImageFilesFromAssetsFolder(Context context, String folderName) {
         AssetManager assetManager = context.getAssets();
+        List<String> imageFiles = new ArrayList<>();
+
+        // Расширения изображений
+        List<String> imageExtensions = Arrays.asList(".png", ".jpg", ".jpeg", ".bmp", ".gif", ".webp");
+
         try {
-            String[] files = assetManager.list(folderName);
-            if (files != null && files.length > 0) {
-                // Добавляем все найденные файлы в переданный список
-                listFoldersBlocksINAssets.addAll(Arrays.asList(files));
+            String[] items = assetManager.list(folderName);
+            if (items != null && items.length > 0) {
+                for (String item : items) {
+                    // Проверяем по расширению
+                    String lowerItem = item.toLowerCase();
+                    boolean hasImageExtension = false;
+
+                    for (String ext : imageExtensions) {
+                        if (lowerItem.endsWith(ext)) {
+                            hasImageExtension = true;
+                            break;
+                        }
+                    }
+
+                    if (hasImageExtension) {
+                        // Дополнительно проверяем, что это действительно файл (не папка)
+                        try {
+                            assetManager.open(folderName + "/" + item).close();
+                            imageFiles.add(item);
+                            Log.d(TAG, "✅ Изображение: " + item);
+                        } catch (IOException e) {
+                            Log.d(TAG, "⏭️ Папка с именем как файл: " + item);
+                        }
+                    } else {
+                        Log.d(TAG, "⏭️ Не изображение: " + item);
+                    }
+                }
             }
         } catch (IOException ec) {
-            ec.printStackTrace();
+            Log.e(TAG, "Ошибка при чтении папки " + folderName, ec);
         }
-        return listFoldersBlocksINAssets;
+
+        return imageFiles;
     }
 
 
+
+
+
+//получение бинарных данных для дальнейшей записи, этот метод сейчас использует класс DBValvesRepository
 public byte[] imageToByteArray(Context context,String folderName,String fileNameDB)
 {AssetManager assetManager = context.getAssets();
     try {

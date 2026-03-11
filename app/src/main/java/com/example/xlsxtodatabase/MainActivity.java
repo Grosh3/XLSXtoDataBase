@@ -18,6 +18,8 @@ import com.example.xlsxtodatabase.databinding.ActivityMainBinding;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -93,7 +95,22 @@ public class MainActivity extends AppCompatActivity {
      в БД создана и успешно функционирует. Я его не удаляю, потому что он может еще понадобиться.
  */
       //  openXlsxContract.launch(mimeTypeExcelStr);
+        List <String> listNamespaceBlockFolders = new ArrayList<>(Arrays.asList("OPEN_BLOCK", "CLOSE_BLOCK", "PERIFER_BLOCK"
+        ));
+     MyAssetManager myAssetManager = new MyAssetManager();
+     myAssetManager.assetsForDB(getApplicationContext(), listNamespaceBlockFolders, new DBWriteListener() {
+         @Override
+         public void onDBsuccess(Boolean resultBLOB) {
+             Log.e(TAG,"Операция добавления бинарных данных в БД, выполнена. "+resultBLOB.toString());
+             Toast.makeText(getApplicationContext(),"Операция добавления бинарных данных в БД, выполнена. "+resultBLOB.toString(),Toast.LENGTH_LONG).show();
+         }
 
+         @Override
+         public void onDBerror(Exception e) {
+             Log.e(TAG,"Операция добавления бинарных данных в БД, НЕ выполнена. "+e.getMessage());
+             Toast.makeText(getApplicationContext(),"Операция добавления бинарных данных в БД, НЕ выполнена. "+e.getMessage(),Toast.LENGTH_LONG).show();
+         }
+     });
     }
 
 
