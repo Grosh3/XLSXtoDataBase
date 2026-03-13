@@ -95,9 +95,15 @@ public class MainActivity extends AppCompatActivity {
      в БД создана и успешно функционирует. Я его не удаляю, потому что он может еще понадобиться.
  */
       //  openXlsxContract.launch(mimeTypeExcelStr);
-        List <String> listNamespaceBlockFolders = new ArrayList<>(Arrays.asList("OPEN_BLOCK", "CLOSE_BLOCK", "PERIFER_BLOCK"
+
+
+        // метод для записи в БД бинарных данных изображений фрагментов блокировок.
+        //неактивен
+   /*     List <String> listNamespaceBlockFolders = new ArrayList<>(Arrays.asList("OPEN_BLOCK", "CLOSE_BLOCK", "PERIFER_BLOCK"
         ));
      MyAssetManager myAssetManager = new MyAssetManager();
+     // метод для записи в БД бинарных данных изображений фрагментов блокировок.
+        //неактивен
      myAssetManager.assetsForDB(getApplicationContext(), listNamespaceBlockFolders, new DBWriteListener() {
          @Override
          public void onDBsuccess(Boolean resultBLOB) {
@@ -111,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
              Toast.makeText(getApplicationContext(),"Операция добавления бинарных данных в БД, НЕ выполнена. "+e.getMessage(),Toast.LENGTH_LONG).show();
          }
      });
+
+    */
     }
 
 

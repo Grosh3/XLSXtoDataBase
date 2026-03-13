@@ -49,8 +49,9 @@ private final ExecutorService executor = Executors.newSingleThreadExecutor();
             });
     }
 
-
+// метод для извлечения списка файлов из папки в assets
     public List<String> getImageFilesFromAssetsFolder(Context context, String folderName) {
+        Log.d(TAG, "Сработал метод getImageFilesFromAssetsFolder()" );
         AssetManager assetManager = context.getAssets();
         List<String> imageFiles = new ArrayList<>();
 
@@ -99,7 +100,9 @@ private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
 //получение бинарных данных для дальнейшей записи, этот метод сейчас использует класс DBValvesRepository
 public byte[] imageToByteArray(Context context,String folderName,String fileNameDB)
-{AssetManager assetManager = context.getAssets();
+{  Log.e(TAG,"сработал метод конвертор изображений в бинарный код -> imageToByteArray");
+
+    AssetManager assetManager = context.getAssets();
     try {
 
 
@@ -125,7 +128,7 @@ public byte[] imageToByteArray(Context context,String folderName,String fileName
         String filePath = folderName + "/" + targetFileName;
 
         // Читаем файл в массив байт
-
+        Log.e(TAG,"ссылка на файл изображений "+filePath)  ;
        return  readAssetFileToBytes(assetManager, filePath);
     }
 
@@ -145,7 +148,7 @@ public byte[] imageToByteArray(Context context,String folderName,String fileName
 
 
 
-
+//метод для передачи изображений блокировок в массив байт
 
     private byte[] readAssetFileToBytes(AssetManager assetManager, String filePath) throws IOException {
         InputStream inputStream = null;
@@ -161,7 +164,7 @@ public byte[] imageToByteArray(Context context,String folderName,String fileName
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, bytesRead);
             }
-
+            Log.e(TAG,"данные загружены в поток байт")  ;
             return outputStream.toByteArray();
         } finally {
             // Закрываем потоки
